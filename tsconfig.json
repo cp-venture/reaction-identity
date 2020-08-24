@@ -13,7 +13,6 @@
     "experimentalDecorators": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
     "jsx": "preserve",
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": false,
@@ -31,5 +30,5 @@
   },
   "exclude": ["node_modules", "src"],
   "include": [
-    "next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
+    "next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"]
 }

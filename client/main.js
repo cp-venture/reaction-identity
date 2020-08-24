@@ -6,10 +6,10 @@ import { HttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
-import App from "./components/App.js";
-import Loading from "./components/Loading.js";
-import Logger from "./Logger.js";
-import "./i18n.js";
+import App from "./components/App";
+import Loading from "./components/Loading";
+import Logger from "./Logger";
+import "./i18n";
 
 const RouterContext = createContext(null);
 

@@ -132,6 +132,7 @@
   },
   "devDependencies": {
     "eslint-import-resolver-meteor": "^0.4.0",
+    "ts-loader": "^5.4.4",
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-react-hooks": "^2.1.2",
     "@babel/preset-flow": "^7.0.0",
