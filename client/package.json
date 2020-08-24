@@ -1,43 +1,39 @@
 {
-  "name": "reaction-identity",
-  "description": "A server providing identity services for Reaction Commerce using Meteor's Accounts packages",
-  "version": "3.2.0",
-  "homepage": "https://github.com/reactioncommerce/reaction-identity",
-  "url": "https://github.com/reactioncommerce/reaction-identity",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/reactioncommerce/reaction-identity.git"
-  },
+  "name": "example-storefront",
+  "version": "3.1.0",
+  "description": "The Example Storefront serves as a reference for implementing a web based storefront using the Reaction Commerce GraphQL API.",
+  "keywords": [],
   "author": {
     "name": "Reaction Commerce",
     "email": "engineering@reactioncommerce.com",
     "url": "https://reactioncommerce.com"
   },
   "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/reactioncommerce/reaction-identity/issues"
-  },
+  "sideEffects": false,
   "scripts": {
-    "start": "meteor run --port ${PORT:=4100}",
+    "dev": "echo 'Note: dev script has been renamed to start:dev' && yarn run start:dev",
+    "build": "yarn run build-clean && NODE_ENV=production IS_BUILDING_NEXTJS=1 next build",
+    "build-clean": "rimraf .next",
     "lint": "eslint .",
-    "visualize": "meteor --production --extra-packages bundle-visualizer"
+    "start": "yarn run create-hydra-client && NODE_ENV=production next start -p 4000",
+    "start:dev": "yarn run create-hydra-client && NODE_ENV=development next dev -p 4000",
+    "test": "yarn run test:unit",
+    "test:ci": "yarn run test:unit --ci --runInBand --colors",
+    "test:unit": "NODE_ENV=jesttest jest",
+    "test:unit:watch": "NODE_ENV=jesttest jest --watchAll",
+    "test:link": "blc http://web.reaction.localhost:4000 -ro -filter=3 -e",
+    "test:file": "NODE_ENV=jesttest jest --watch --no-coverage",
+    "create-hydra-client": "node createHydraClientIfNecessary.js"
+  },
+  "eslintConfig": {
+    "extends": "@reactioncommerce",
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
   },
   "dependencies": {
-    "@babel/runtime": "^7.7.7",
-    "@reactioncommerce/logger": "^1.1.3",
-    "@reactioncommerce/random": "^1.0.2",
-    "bcrypt": "^3.0.7",
-    "i18next": "^19.0.2",
-    "i18next-browser-languagedetector": "^4.0.1",
-    "i18next-fetch-backend": "^2.2.0",
-    "i18next-multiload-backend-adapter": "^0.1.1",
-    "meteor-node-stubs": "^1.0.0",
-    "mongodb": "3.5.7",
-    "node-fetch": "^2.6.0",
-    "react-apollo": "^3.1.3",
-    "react-i18next": "^11.2.7",
-    "react-router-dom": "^5.1.2",
-    "simpl-schema": "^1.5.6",
     "@apollo/client": "^3.0.0-beta.41",
     "@apollo/link-context": "^2.0.0-beta.3",
     "@apollo/link-error": "^2.0.0-beta.3",
@@ -124,16 +120,7 @@
     "yup": "^0.29.1",
     "react-tag-autocomplete": "^6.1.0"
   },
-  "meteor": {
-    "mainModule": {
-      "client": "client/main.js",
-      "server": "server/main.js"
-    }
-  },
   "devDependencies": {
-    "eslint-import-resolver-meteor": "^0.4.0",
-    "eslint-plugin-node": "^10.0.0",
-    "eslint-plugin-react-hooks": "^2.1.2",
     "@babel/preset-flow": "^7.0.0",
     "@reactioncommerce/eslint-config": "~1.9.0",
     "@testing-library/jest-dom": "^5.10.1",
@@ -168,32 +155,51 @@
     "snyk": "~1.126.0",
     "typescript": "^3.9.5"
   },
-  "browserslist": [
-    "last 2 versions",
-    "> 1%",
-    "IE 11"
-  ],
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/reports/**",
+      "!**/dist/**",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ],
+    "coverageDirectory": "reports/coverage",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/node_nodules/",
+      "<rootDir>/build/",
+      "<rootDir>/lib/tracking/utils"
+    ],
+    "moduleNameMapper": {
+      "^hocs(.*)$": "<rootDir>/hocs$1",
+      "^hooks(.*)$": "<rootDir>/hooks$1",
+      "^context(.*)$": "<rootDir>/context$1",
+      "^lib(.*)$": "<rootDir>/lib$1",
+      "^containers(.*)$": "<rootDir>/containers$1",
+      "^components(.*)$": "<rootDir>/components$1",
+      "^translations(.*)$": "<rootDir>/translations$1",
+      "^staticUtils(.*)$": "<rootDir>/staticUtils$1"
+    },
+    "reporters": [
+      "default",
+      "jest-junit"
+    ],
+    "roots": [
+      "<rootDir>"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupTests.js"
+    ],
+    "transform": {
+      "\\.(gql|graphql)$": "jest-transform-graphql",
+      ".*": "babel-jest"
+    }
+  },
+  "jest-junit": {
+    "output": "reports/junit/junit.xml",
+    "suiteName": "jest-tests"
+  },
   "prettier": {
     "arrowParens": "always"
-  },
-  "eslintConfig": {
-    "extends": "@reactioncommerce",
-    "settings": {
-      "import/resolver": "meteor",
-      "react": {
-        "version": "detect"
-      }
-    },
-    "globals": {
-      "Package": true
-    },
-    "rules": {
-      "jsx-a11y/label-has-for": "off",
-      "node/no-missing-import": "off",
-      "node/no-missing-require": "off",
-      "node/no-unsupported-features/es-syntax": "off",
-      "node/no-unpublished-import": "off",
-      "node/no-unpublished-require": "off"
-    }
   }
 }
